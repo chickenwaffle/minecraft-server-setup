@@ -8,7 +8,7 @@ namespace ConsoleApplication1
     {
         enum Difficulty
         {
-            peaceful, easy, normal, hard
+            peaceful=0, easy=1, normal=2, hard=3
         };
 
         const string PROPERTIES_FILE = @"#Minecraft server properties
@@ -49,18 +49,29 @@ view-distance={VIEW_DISTANCE}
 generate-structures={GENERATE_STRUCTURES}
 motd={MOTD}
 ";
-
-        static bool WritePropertiesFile()
+        static bool generateFile(string file)
         {
-            using (StreamWriter sw = new StreamWriter("minecraft_server/newserver.properties"))
+            switch (file)
             {
-                string newpropertiesfile = PROPERTIES_FILE.Replace("{LEVEL_NAME}", "YOU SUCK!");
-                sw.Write(newpropertiesfile);
-                sw.Close();
+                case "eula.txt":
+                    using (StreamWriter sw = new StreamWriter(file))
+                    {
+                        sw.Write("eula=true");
+                        sw.Close();
+                    }
+                    break;
+                
+                case "run.bat":
+                    using (StreamWriter sw = new StreamWriter(file))
+                    {
+                        sw.Write("java -Xmx1024M -Xms1024M -jar minecraft_server.jar nogui\npause");
+                        sw.Close();
+                    }
+                    break;
             }
 
-            if (File.Exists("minecraft_server/newserver.properties"))   return true;
-            else                                                        return false;
+            if (File.Exists(file))    return true;
+            else                      return false;
         }
 
         static bool DownloadMinecraft(bool verbose)
@@ -69,15 +80,21 @@ motd={MOTD}
             
             using (WebClient wc = new WebClient())
             {
-                wc.DownloadFile("https://s3.amazonaws.com/Minecraft.Download/versions/1.8.7/minecraft_server.1.8.7.jar", "minecraft_server/minecraft_server.jar");
+                wc.DownloadFile("https://s3.amazonaws.com/Minecraft.Download/versions/1.8.7/minecraft_server.1.8.7.jar", "minecraft_server.jar");
             }
 
-            if (File.Exists("minecraft_server/minecraft_server.jar"))   return true;
+            if (File.Exists("minecraft_server.jar"))   return true;
             else                                                        return false;
         }
 
         static void Main(string[] args)
         {
+            // FILES
+            const string EULA = "eula.txt";
+            const string SERVER_PROPERTIES = "server.properties";
+            const string MINECRAFT_SERVER = "minecraft_server.jar";
+
+            // Server properties
             string generatorSettings = "";
             string opPermissionLevel = "4";
             bool nether = true;
@@ -106,13 +123,13 @@ motd={MOTD}
             sbyte difficulty = (sbyte)Difficulty.peaceful;
             bool enableCommandBlock = false;
             string gamemode = "0";
-            string playerIdleTimeout;
+            string playerIdleTimeout = "";
             string maxPlayers = "20";
             string maxTickTime = "60000";
             bool spawnMonsters = true;
             bool generateStructures = true;
             string viewDistance = "10";
-            string motd = "You suck.";
+            string motd = "";
             
 
             // attempt to download the minecraft server to the running directory
@@ -127,19 +144,58 @@ motd={MOTD}
                 System.Environment.Exit(1);
             }
 
-            if (!WritePropertiesFile())
-            {
-                Console.WriteLine("ERROR: Could not write server.properties file. Check to see if you have permission to write to this folder.");
-                System.Environment.Exit(1);
+            if (File.Exists("server.properties")) {
+                Console.Write("A server.properties already exists on the server. Overwrite the previous file? (y/N):");
+                string answer = Console.ReadLine();
+                answer.ToLower().Trim();
+
+                if (answer == "y" || answer == "yes") {
+                    using (StreamWriter sw = new StreamWriter(SERVER_PROPERTIES))
+                    {
+                        string newpropertiesfile = PROPERTIES_FILE.Replace("{GENERATOR_SETTINGS}", generatorSettings)
+                                                                  .Replace("{OP_PERMISSION_LEVEL}", opPermissionLevel)
+                                                                  .Replace("{RESOURCE_PACK_HASH}", resourcePackHash)
+                                                                  .Replace("{ALLOW_NETHER}", nether.ToString().ToLower())
+                                                                  .Replace("{LEVEL_NAME}", lvlName)
+                                                                  .Replace("{ENABLE_QUERY}", enableQuery.ToString().ToLower())
+                                                                  .Replace("{ALLOW_FLIGHT}", allowFlight.ToString().ToLower())
+                                                                  .Replace("{ANNOUNCE_PLAYER_ACHIEVEMENTS}", announcePlayerAchievements.ToString().ToLower())
+                                                                  .Replace("{SERVER_PORT}", serverPort)
+                                                                  .Replace("{MAX_WORLD_SIZE}", maxWorldSize)
+                                                                  .Replace("{LEVEL_TYPE}", lvlType)
+                                                                  .Replace("{ENABLE_RCON}", enableRcon.ToString().ToLower())
+                                                                  .Replace("{FORCE_GAMEMODE}", forceGamemode.ToString().ToLower())
+                                                                  .Replace("{LEVEL_SEED}", lvlSeed)
+                                                                  .Replace("{SERVER_IP}", serverIP)
+                                                                  .Replace("{NETWORK_COMPRESSION_THRESHOLD}", networkCompressionThreshold)
+                                                                  .Replace("{MAX_BUILD_HEIGHT}", maxBuildHeight)
+                                                                  .Replace("{SPAWN_NPCS}", spawnNPCs.ToString().ToLower())
+                                                                  .Replace("{WHITE_LIST}", whiteList.ToString().ToLower())
+                                                                  .Replace("{SPAWN_ANIMALS}", spawnAnimals.ToString().ToLower())
+                                                                  .Replace("{SNOOPER_ENABLED}", snooperEnabled.ToString().ToLower())
+                                                                  .Replace("{HARDCORE}", hardcore.ToString().ToLower())
+                                                                  .Replace("{ONLINE_MODE}", onlineMode.ToString().ToLower())
+                                                                  .Replace("{RESOURCE_PACK}", resourcePack)
+                                                                  .Replace("{PVP}", pvp.ToString().ToLower())
+                                                                  .Replace("{DIFFICULTY}", difficulty.ToString())
+                                                                  .Replace("{ENABLE_COMMAND_BLOCK}", enableCommandBlock.ToString().ToLower())
+                                                                  .Replace("{PLAYER_IDLE_TIMEOUT}", playerIdleTimeout)
+                                                                  .Replace("{GAMEMODE}", gamemode)
+                                                                  .Replace("{MAX_PLAYERS}", maxPlayers)
+                                                                  .Replace("{MAX_TICK_TIME}", maxTickTime)
+                                                                  .Replace("{SPAWN_MONSTERS}", spawnMonsters.ToString().ToLower())
+                                                                  .Replace("{VIEW_DISTANCE}", viewDistance)
+                                                                  .Replace("{GENERATE_STRUCTURES}", generateStructures.ToString().ToLower())
+                                                                  .Replace("{MOTD}", motd);
+                        sw.Write(newpropertiesfile);
+                        sw.Close();
+                    }
+                }
             }
 
-            using (StreamWriter sw = new StreamWriter("minecraft_server/eula.txt"))
-            {
-                sw.Write("eula=true");
-                sw.Close();
+            if (!File.Exists(EULA)) {
+                generateFile(EULA);
             }
-
-
         }
     }
 }
