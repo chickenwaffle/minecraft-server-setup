@@ -133,63 +133,51 @@ motd={MOTD}
             
 
             // attempt to download the minecraft server to the running directory
-            if (!Directory.Exists("minecraft_server"))
+            if (!File.Exists(MINECRAFT_SERVER))
             {
-                Directory.CreateDirectory("minecraft_server");
+                DownloadMinecraft(true);
             }
 
-            if (!DownloadMinecraft(true))
-            {
-                Console.WriteLine("Download failed.");
-                System.Environment.Exit(1);
-            }
-
-            if (File.Exists("server.properties")) {
-                Console.Write("A server.properties already exists on the server. Overwrite the previous file? (y/N):");
-                string answer = Console.ReadLine();
-                answer.ToLower().Trim();
-
-                if (answer == "y" || answer == "yes") {
-                    using (StreamWriter sw = new StreamWriter(SERVER_PROPERTIES))
-                    {
-                        string newpropertiesfile = PROPERTIES_FILE.Replace("{GENERATOR_SETTINGS}", generatorSettings)
-                                                                  .Replace("{OP_PERMISSION_LEVEL}", opPermissionLevel)
-                                                                  .Replace("{RESOURCE_PACK_HASH}", resourcePackHash)
-                                                                  .Replace("{ALLOW_NETHER}", nether.ToString().ToLower())
-                                                                  .Replace("{LEVEL_NAME}", lvlName)
-                                                                  .Replace("{ENABLE_QUERY}", enableQuery.ToString().ToLower())
-                                                                  .Replace("{ALLOW_FLIGHT}", allowFlight.ToString().ToLower())
-                                                                  .Replace("{ANNOUNCE_PLAYER_ACHIEVEMENTS}", announcePlayerAchievements.ToString().ToLower())
-                                                                  .Replace("{SERVER_PORT}", serverPort)
-                                                                  .Replace("{MAX_WORLD_SIZE}", maxWorldSize)
-                                                                  .Replace("{LEVEL_TYPE}", lvlType)
-                                                                  .Replace("{ENABLE_RCON}", enableRcon.ToString().ToLower())
-                                                                  .Replace("{FORCE_GAMEMODE}", forceGamemode.ToString().ToLower())
-                                                                  .Replace("{LEVEL_SEED}", lvlSeed)
-                                                                  .Replace("{SERVER_IP}", serverIP)
-                                                                  .Replace("{NETWORK_COMPRESSION_THRESHOLD}", networkCompressionThreshold)
-                                                                  .Replace("{MAX_BUILD_HEIGHT}", maxBuildHeight)
-                                                                  .Replace("{SPAWN_NPCS}", spawnNPCs.ToString().ToLower())
-                                                                  .Replace("{WHITE_LIST}", whiteList.ToString().ToLower())
-                                                                  .Replace("{SPAWN_ANIMALS}", spawnAnimals.ToString().ToLower())
-                                                                  .Replace("{SNOOPER_ENABLED}", snooperEnabled.ToString().ToLower())
-                                                                  .Replace("{HARDCORE}", hardcore.ToString().ToLower())
-                                                                  .Replace("{ONLINE_MODE}", onlineMode.ToString().ToLower())
-                                                                  .Replace("{RESOURCE_PACK}", resourcePack)
-                                                                  .Replace("{PVP}", pvp.ToString().ToLower())
-                                                                  .Replace("{DIFFICULTY}", difficulty.ToString())
-                                                                  .Replace("{ENABLE_COMMAND_BLOCK}", enableCommandBlock.ToString().ToLower())
-                                                                  .Replace("{PLAYER_IDLE_TIMEOUT}", playerIdleTimeout)
-                                                                  .Replace("{GAMEMODE}", gamemode)
-                                                                  .Replace("{MAX_PLAYERS}", maxPlayers)
-                                                                  .Replace("{MAX_TICK_TIME}", maxTickTime)
-                                                                  .Replace("{SPAWN_MONSTERS}", spawnMonsters.ToString().ToLower())
-                                                                  .Replace("{VIEW_DISTANCE}", viewDistance)
-                                                                  .Replace("{GENERATE_STRUCTURES}", generateStructures.ToString().ToLower())
-                                                                  .Replace("{MOTD}", motd);
-                        sw.Write(newpropertiesfile);
-                        sw.Close();
-                    }
+            if (!File.Exists("server.properties")) {
+                using (StreamWriter sw = new StreamWriter(SERVER_PROPERTIES))
+                {
+                    string newpropertiesfile = PROPERTIES_FILE.Replace("{GENERATOR_SETTINGS}", generatorSettings)
+                                                                .Replace("{OP_PERMISSION_LEVEL}", opPermissionLevel)
+                                                                .Replace("{RESOURCE_PACK_HASH}", resourcePackHash)
+                                                                .Replace("{ALLOW_NETHER}", nether.ToString().ToLower())
+                                                                .Replace("{LEVEL_NAME}", lvlName)
+                                                                .Replace("{ENABLE_QUERY}", enableQuery.ToString().ToLower())
+                                                                .Replace("{ALLOW_FLIGHT}", allowFlight.ToString().ToLower())
+                                                                .Replace("{ANNOUNCE_PLAYER_ACHIEVEMENTS}", announcePlayerAchievements.ToString().ToLower())
+                                                                .Replace("{SERVER_PORT}", serverPort)
+                                                                .Replace("{MAX_WORLD_SIZE}", maxWorldSize)
+                                                                .Replace("{LEVEL_TYPE}", lvlType)
+                                                                .Replace("{ENABLE_RCON}", enableRcon.ToString().ToLower())
+                                                                .Replace("{FORCE_GAMEMODE}", forceGamemode.ToString().ToLower())
+                                                                .Replace("{LEVEL_SEED}", lvlSeed)
+                                                                .Replace("{SERVER_IP}", serverIP)
+                                                                .Replace("{NETWORK_COMPRESSION_THRESHOLD}", networkCompressionThreshold)
+                                                                .Replace("{MAX_BUILD_HEIGHT}", maxBuildHeight)
+                                                                .Replace("{SPAWN_NPCS}", spawnNPCs.ToString().ToLower())
+                                                                .Replace("{WHITE_LIST}", whiteList.ToString().ToLower())
+                                                                .Replace("{SPAWN_ANIMALS}", spawnAnimals.ToString().ToLower())
+                                                                .Replace("{SNOOPER_ENABLED}", snooperEnabled.ToString().ToLower())
+                                                                .Replace("{HARDCORE}", hardcore.ToString().ToLower())
+                                                                .Replace("{ONLINE_MODE}", onlineMode.ToString().ToLower())
+                                                                .Replace("{RESOURCE_PACK}", resourcePack)
+                                                                .Replace("{PVP}", pvp.ToString().ToLower())
+                                                                .Replace("{DIFFICULTY}", difficulty.ToString())
+                                                                .Replace("{ENABLE_COMMAND_BLOCK}", enableCommandBlock.ToString().ToLower())
+                                                                .Replace("{PLAYER_IDLE_TIMEOUT}", playerIdleTimeout)
+                                                                .Replace("{GAMEMODE}", gamemode)
+                                                                .Replace("{MAX_PLAYERS}", maxPlayers)
+                                                                .Replace("{MAX_TICK_TIME}", maxTickTime)
+                                                                .Replace("{SPAWN_MONSTERS}", spawnMonsters.ToString().ToLower())
+                                                                .Replace("{VIEW_DISTANCE}", viewDistance)
+                                                                .Replace("{GENERATE_STRUCTURES}", generateStructures.ToString().ToLower())
+                                                                .Replace("{MOTD}", motd);
+                    sw.Write(newpropertiesfile);
+                    sw.Close();
                 }
             }
 
