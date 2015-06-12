@@ -4,3 +4,9 @@ C:\Users\Matthew\Dropbox\code\cs\ConsoleApplication1\ConsoleApplication1\bin\Deb
 C:\Users\Matthew\Dropbox\code\cs\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
 C:\Users\Matthew\Dropbox\code\cs\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
 C:\Users\Matthew\Dropbox\code\cs\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\Dawson\Desktop\minecraft-server-setup\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Users\Dawson\Desktop\minecraft-server-setup\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\Dawson\Desktop\minecraft-server-setup\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\Dawson\Desktop\minecraft-server-setup\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\Dawson\Desktop\minecraft-server-setup\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\Dawson\Desktop\minecraft-server-setup\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
